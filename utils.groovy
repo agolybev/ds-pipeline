@@ -62,10 +62,10 @@ def linuxBuild(String branch = 'master')
     sh "cd document-server-integration && \
         make all"
     sh "cd document-server-package && \
-        make clean &&\
+        make clean && \
         make deploy"
     sh "cd Docker-DocumentServer && \
-        make clean &&\
+        make clean && \
         make all"
     return this
 }
@@ -74,11 +74,11 @@ def windowsBuild(String branch = 'master')
 {
     checkoutRepos(branch)
 
-    bat "cd core\Common\3dParty && \
+    bat "cd core\\Common\\3dParty && \
             call make.bat"
 
     bat "cd core && \
-            call \"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat\" x64 10.0.14393.0 && \
+            call \"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\" x64 10.0.14393.0 && \
             mingw32-make clean &&
             mingw32-make all ext"
 
