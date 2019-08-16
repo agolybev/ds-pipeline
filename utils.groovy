@@ -79,21 +79,21 @@ def windowsBuild(String branch = 'master')
 
     bat "cd core && \
             call \"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\" x64 10.0.14393.0 && \
-            mingw32-make clean &&
+            mingw32-make clean && \
             mingw32-make all ext"
 
     bat "cd sdkjs && \
-            mingw32-make clean &&
+            mingw32-make clean && \
             mingw32-make all"
 
     bat "cd server && \
-            mingw32-make clean &&
+            mingw32-make clean && \
             mingw32-make all ext"
 
     bat "cd document-server-integration && \
             mingw32-make all"
 
     bat "cd document-server-package && \
-            mingw32-make clean
+            mingw32-make clean && \
             mingw32-make deploy"
 }
