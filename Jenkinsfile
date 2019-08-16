@@ -19,12 +19,12 @@ pipeline {
     booleanParam (
       defaultValue: false,
       description: '',
-      name: 'documentserver-de'
+      name: 'documentserver_de'
     )
     booleanParam (
       defaultValue: true,
       description: '',
-      name: 'documentserver-ie'
+      name: 'documentserver_ie'
     )
   }
   triggers {
@@ -64,7 +64,7 @@ pipeline {
           steps {
             script {
               def utils = load "utils.groovy"
-              if ( params.linux_64 && params.documentserver-de) {
+              if ( params.linux_64 && params.documentserver_de) {
                 utils.linuxBuild(env.BRANCH_NAME)
               }
             }
@@ -76,7 +76,7 @@ pipeline {
           steps {
             script {
               def utils = load "utils.groovy"
-              if ( params.linux_64 && params.documentserver-ie) {
+              if ( params.linux_64 && params.documentserver_ie) {
                 utils.linuxBuild(env.BRANCH_NAME)
               }
             }
@@ -110,7 +110,7 @@ pipeline {
           steps {
             script {
               def utils = load "utils.groovy"
-              if ( params.win_64 && params.documentserver-de ) {
+              if ( params.win_64 && params.documentserver_de ) {
                 utils.windowsBuild(env.BRANCH_NAME)
               }
             }
@@ -127,7 +127,7 @@ pipeline {
           steps {
             script {
               def utils = load "utils.groovy"
-              if ( params.win_64 && params.documentserver-ie ) {
+              if ( params.win_64 && params.documentserver_ie ) {
                 utils.windowsBuild(env.BRANCH_NAME)
               }
             }
