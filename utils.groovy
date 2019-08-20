@@ -66,7 +66,7 @@ def linuxBuild(String branch = 'master')
         make deploy"
     sh "cd Docker-DocumentServer && \
         make clean && \
-        make all"
+        make deploy"
     return this
 }
 
