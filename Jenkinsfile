@@ -120,7 +120,7 @@ pipeline {
           agent {
             node {
               label 'win_64'
-              customWorkspace 'C:\\ds\\ie'
+              customWorkspace "C:\\ds\\${env.BRANCH_NAME}\\ie"
             }
           }
           environment { PRODUCT_NAME = "DocumentServer-IE" }
