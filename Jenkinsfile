@@ -86,7 +86,7 @@ pipeline {
           agent {
             node {
               label 'win_64'
-              customWorkspace 'C:\\ds\\os'
+              customWorkspace "C:\\ds\\${env.BRANCH_NAME}\\os"
             }
           }
           environment { PRODUCT_NAME = "DocumentServer" }
@@ -103,7 +103,7 @@ pipeline {
           agent {
             node {
               label 'win_64'
-              customWorkspace 'C:\\ds\\de'
+              customWorkspace "C:\\ds\\${env.BRANCH_NAME}\\de"
             }
           }
           environment { PRODUCT_NAME = "DocumentServer-DE" }
