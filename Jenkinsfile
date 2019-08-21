@@ -78,6 +78,7 @@ pipeline {
               def utils = load "utils.groovy"
               if ( params.linux_64 && params.documentserver_ie) {
                 utils.linuxBuild(env.BRANCH_NAME)
+                utils.tagRepos("v${env.PRODUCT_VERSION}.${env.BUILD_NUMBER}")
               }
             }
           }

@@ -22,7 +22,7 @@ def checkoutRepo(String repo, String branch = 'master') {
 
 return this
 
-def checkoutRepos(String branch = 'master')
+def getReposList(String branch = 'master')
 {
     def repos = []
     repos.add('core')
@@ -37,9 +37,26 @@ def checkoutRepos(String branch = 'master')
     repos.add('server')
     repos.add('web-apps-pro')
     repos.add('Docker-DocumentServer')
-    
-    for (repo in repos) {
+    return repos
+}
+
+def checkoutRepos(String branch = 'master')
+{    
+    for (repo in getReposList()) {
         checkoutRepo(repo, branch)
+    }
+
+    return this
+}
+
+def tagRepos(String tag)
+{
+    for (repo in getReposList()) {
+        sh "cd ${repo} && \
+            git tag -l | xargs git tag -d && \
+            git fetch --tags && \
+            git tag ${tag} && \
+	        git push origin --tags"
     }
 
     return this
