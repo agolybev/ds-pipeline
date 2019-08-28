@@ -46,6 +46,19 @@ pipeline {
     }
     stage('Build') {
       parallel {
+        stage('DocumentServer-IE(linux_64) build') {
+          agent { label 'linux_64' }
+          environment { PRODUCT_NAME = "documentserver-ie" }
+          steps {
+            script {
+              def utils = load "utils.groovy"
+              if ( params.linux_64 && params.documentserver_ie) {
+                utils.linuxBuild(env.BRANCH_NAME)
+                utils.tagRepos("v${env.PRODUCT_VERSION}.${env.BUILD_NUMBER}")
+              }
+            }
+          }
+        }
         stage('DocumentServer(linux_64) build') {
           agent { label 'linux_64' }
           environment { PRODUCT_NAME = "documentserver" }
@@ -66,19 +79,6 @@ pipeline {
               def utils = load "utils.groovy"
               if ( params.linux_64 && params.documentserver_de) {
                 utils.linuxBuild(env.BRANCH_NAME)
-              }
-            }
-          }
-        }
-        stage('DocumentServer-IE(linux_64) build') {
-          agent { label 'linux_64' }
-          environment { PRODUCT_NAME = "documentserver-ie" }
-          steps {
-            script {
-              def utils = load "utils.groovy"
-              if ( params.linux_64 && params.documentserver_ie) {
-                utils.linuxBuild(env.BRANCH_NAME)
-                utils.tagRepos("v${env.PRODUCT_VERSION}.${env.BUILD_NUMBER}")
               }
             }
           }
