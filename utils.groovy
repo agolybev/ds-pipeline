@@ -1,4 +1,4 @@
-def checkoutRepo(String repo, String branch = 'master') {
+def checkoutRepo(String repo, String branch = 'master', String company = 'ONLYOFFICE') {
     checkout([
             $class: 'GitSCM',
             branches: [[
@@ -13,7 +13,7 @@ def checkoutRepo(String repo, String branch = 'master') {
             ],
             submoduleCfg: [],
             userRemoteConfigs: [[
-                    url: 'git@github.com:ONLYOFFICE/' + repo + '.git'
+                    url: "git@github.com:${company}/${repo}.git"
                 ]
             ]
         ]
@@ -22,7 +22,7 @@ def checkoutRepo(String repo, String branch = 'master') {
 
 return this
 
-def checkoutRepos(String branch = 'master')
+def getReposList(String branch = 'master')
 {
     def repos = []
     repos.add('core')
@@ -37,9 +37,26 @@ def checkoutRepos(String branch = 'master')
     repos.add('server')
     repos.add('web-apps-pro')
     repos.add('Docker-DocumentServer')
-    
-    for (repo in repos) {
+    return repos
+}
+
+def checkoutRepos(String branch = 'master')
+{    
+    for (repo in getReposList()) {
         checkoutRepo(repo, branch)
+    }
+
+    return this
+}
+
+def tagRepos(String tag)
+{
+    for (repo in getReposList()) {
+        sh "cd ${repo} && \
+            git tag -l | xargs git tag -d && \
+            git fetch --tags && \
+            git tag ${tag} && \
+	        git push origin --tags"
     }
 
     return this
@@ -62,11 +79,11 @@ def linuxBuild(String branch = 'master')
     sh "cd document-server-integration && \
         make all"
     sh "cd document-server-package && \
-        make clean &&\
+        make clean && \
         make deploy"
     sh "cd Docker-DocumentServer && \
-        make clean &&\
-        make all"
+        make clean && \
+        make deploy"
     return this
 }
 
@@ -74,26 +91,26 @@ def windowsBuild(String branch = 'master')
 {
     checkoutRepos(branch)
 
-    bat "cd core\Common\3dParty && \
+    bat "cd core\\Common\\3dParty && \
             call make.bat"
 
     bat "cd core && \
-            call \"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat\" x64 10.0.14393.0 && \
-            mingw32-make clean &&
+            call \"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\" x64 10.0.14393.0 && \
+            mingw32-make clean && \
             mingw32-make all ext"
 
     bat "cd sdkjs && \
-            mingw32-make clean &&
+            mingw32-make clean && \
             mingw32-make all"
 
     bat "cd server && \
-            mingw32-make clean &&
+            mingw32-make clean && \
             mingw32-make all ext"
 
     bat "cd document-server-integration && \
             mingw32-make all"
 
     bat "cd document-server-package && \
-            mingw32-make clean
+            mingw32-make clean && \
             mingw32-make deploy"
 }
