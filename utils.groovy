@@ -35,7 +35,7 @@ def getReposList(String branch = 'master')
     repos.add('sdkjs')
     repos.add('sdkjs-plugins')
     repos.add('server')
-    repos.add('web-apps-pro')
+    repos.add('web-apps')
     repos.add('Docker-DocumentServer')
     return repos
 }
