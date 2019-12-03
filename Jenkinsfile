@@ -4,6 +4,11 @@ pipeline {
     booleanParam (
       defaultValue: true,
       description: '',
+      name: 'clean'
+    )
+    booleanParam (
+      defaultValue: true,
+      description: '',
       name: 'linux_64'
     )
     booleanParam (
@@ -53,7 +58,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.linux_64 && params.documentserver_ie) {
-                utils.linuxBuild(env.BRANCH_NAME)
+                utils.linuxBuild(env.BRANCH_NAME, "linux_64", params.clean)
                 utils.tagRepos("v${env.PRODUCT_VERSION}.${env.BUILD_NUMBER}")
               }
             }
@@ -66,7 +71,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.linux_64 && params.documentserver) {
-                utils.linuxBuild(env.BRANCH_NAME )
+                utils.linuxBuild(env.BRANCH_NAME, "linux_64", params.clean)
               }
             }
           }
@@ -78,7 +83,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.linux_64 && params.documentserver_de) {
-                utils.linuxBuild(env.BRANCH_NAME)
+                utils.linuxBuild(env.BRANCH_NAME, "linux_64", params.clean)
               }
             }
           }
@@ -95,7 +100,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.win_64 && params.documentserver ) {
-                utils.windowsBuild(env.BRANCH_NAME)
+                utils.windowsBuild(env.BRANCH_NAME, "win_64", params.clean)
               }
             }
           }
@@ -112,7 +117,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.win_64 && params.documentserver_de ) {
-                utils.windowsBuild(env.BRANCH_NAME)
+                utils.windowsBuild(env.BRANCH_NAME, "win_64", params.clean)
               }
             }
           }
@@ -129,7 +134,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.win_64 && params.documentserver_ie ) {
-                utils.windowsBuild(env.BRANCH_NAME)
+                utils.windowsBuild(env.BRANCH_NAME, "win_64", params.clean)
               }
             }
           }

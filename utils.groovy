@@ -25,8 +25,8 @@ return this
 def getReposList(String branch = 'master')
 {
     def repos = []
+    repos.add('build_tools')
     repos.add('core')
-    repos.add('core-ext')
     repos.add('core-fonts')
     repos.add('desktop-sdk')
     repos.add('dictionaries')
@@ -62,19 +62,19 @@ def tagRepos(String tag)
     return this
 }
 
-def linuxBuild(String branch = 'master')
+def linuxBuild(String branch = 'master', String platform = 'native', Boolean clean = true)
 {
     checkoutRepos(branch)
-    sh "cd core/Common/3dParty && \
-        ./make.sh"
-    sh "cd core && \
-        make clean && \
-        make all ext"
-    sh "cd sdkjs && \
-        make clean && \
-        make all"
+    sh "cd build_tools && \
+        ./configure \
+            --module \"server\"\
+            --platform ${platform}\
+            --update false\
+            --branch ${branch}\
+            --clean ${clean.toString()}\
+            --qt-dir \$QT_PATH &&\
+        ./make"
     sh "cd server && \
-        make clean && \
         make all ext"
     sh "cd document-server-integration && \
         make all"
@@ -87,24 +87,22 @@ def linuxBuild(String branch = 'master')
     return this
 }
 
-def windowsBuild(String branch = 'master')
+def windowsBuild(String branch = 'master', String platform = 'native', Boolean clean = true)
 {
     checkoutRepos(branch)
 
-    bat "cd core\\Common\\3dParty && \
-            call make.bat"
-
-    bat "cd core && \
-            call \"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\" x64 10.0.14393.0 && \
-            mingw32-make clean && \
-            mingw32-make all ext"
-
-    bat "cd sdkjs && \
-            mingw32-make clean && \
-            mingw32-make all"
+    bat "cd build_tools &&\
+            call python configure.py\
+            --module \"server\"\
+            --platform ${platform}\
+            --update false\
+            --branch ${branch}\
+            --clean ${clean.toString()}\
+            --qt-dir \"C:\\Qt\\Qt5.9.8\\5.9.8\"\
+            --qt-dir-xp \"C:\\Qt\\Qt5.6.3\\5.6.3\" &&\
+            call python make.py"
 
     bat "cd server && \
-            mingw32-make clean && \
             mingw32-make all ext"
 
     bat "cd document-server-integration && \
