@@ -68,7 +68,7 @@ def linuxBuild(String branch = 'master', String platform = 'native', Boolean cle
     checkoutRepos(branch)
 
     String confParams = "\
-      --module \"server\"
+      --module \"server\"\
       --platform ${platform}\
       --update false\
       --branch ${branch}\
