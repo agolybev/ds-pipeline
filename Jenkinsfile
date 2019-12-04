@@ -58,7 +58,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.linux_64 && params.documentserver_ie) {
-                utils.linuxBuild(env.BRANCH_NAME, "linux_64", params.clean)
+                utils.linuxBuild(env.BRANCH_NAME, "linux_64", params.clean, true)
                 utils.tagRepos("v${env.PRODUCT_VERSION}.${env.BUILD_NUMBER}")
               }
             }
@@ -83,7 +83,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.linux_64 && params.documentserver_de) {
-                utils.linuxBuild(env.BRANCH_NAME, "linux_64", params.clean)
+                utils.linuxBuild(env.BRANCH_NAME, "linux_64", params.clean, true)
               }
             }
           }
@@ -117,7 +117,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.win_64 && params.documentserver_de ) {
-                utils.windowsBuild(env.BRANCH_NAME, "win_64", params.clean)
+                utils.windowsBuild(env.BRANCH_NAME, "win_64", params.clean, true)
               }
             }
           }
@@ -134,7 +134,7 @@ pipeline {
             script {
               def utils = load "utils.groovy"
               if ( params.win_64 && params.documentserver_ie ) {
-                utils.windowsBuild(env.BRANCH_NAME, "win_64", params.clean)
+                utils.windowsBuild(env.BRANCH_NAME, "win_64", params.clean, true)
               }
             }
           }

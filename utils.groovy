@@ -33,6 +33,7 @@ def getReposList(String branch = 'master')
     repos.add('document-server-integration')
     repos.add('document-server-package')
     repos.add('sdkjs')
+    repos.add('sdkjs-comparison')
     repos.add('sdkjs-plugins')
     repos.add('server')
     repos.add('web-apps')
@@ -62,17 +63,24 @@ def tagRepos(String tag)
     return this
 }
 
-def linuxBuild(String branch = 'master', String platform = 'native', Boolean clean = true)
+def linuxBuild(String branch = 'master', String platform = 'native', Boolean clean = true, Boolean noneFree = false)
 {
     checkoutRepos(branch)
+
+    String confParams = "
+      --module \"server\"
+      --platform ${platform}\
+      --update false\
+      --branch ${branch}\
+      --clean ${clean.toString()}\
+      --qt-dir \$QT_PATH"
+
+    if (noneFree) {
+      confParams = confParams.concant("--sdkjs-addon sdkjs-comparison")
+    }
+
     sh "cd build_tools && \
-        ./configure.py \
-            --module \"server\"\
-            --platform ${platform}\
-            --update false\
-            --branch ${branch}\
-            --clean ${clean.toString()}\
-            --qt-dir \$QT_PATH &&\
+        ./configure.py ${confParams} &&\
         ./make.py"
     sh "cd server && \
         make all ext"
@@ -87,19 +95,26 @@ def linuxBuild(String branch = 'master', String platform = 'native', Boolean cle
     return this
 }
 
-def windowsBuild(String branch = 'master', String platform = 'native', Boolean clean = true)
+def windowsBuild(String branch = 'master', String platform = 'native', Boolean clean = true, Boolean noneFree = false)
 {
     checkoutRepos(branch)
 
-    bat "cd build_tools &&\
-            call python configure.py\
+    String confParams = "\
             --module \"server\"\
             --platform ${platform}\
             --update false\
             --branch ${branch}\
             --clean ${clean.toString()}\
+            --sdkjs-addon sdkjs-comparison\
             --qt-dir \"C:\\Qt\\Qt5.9.8\\5.9.8\"\
-            --qt-dir-xp \"C:\\Qt\\Qt5.6.3\\5.6.3\" &&\
+            --qt-dir-xp \"C:\\Qt\\Qt5.6.3\\5.6.3\""
+            
+    if (noneFree) {
+      confParams = confParams.concant("--sdkjs-addon sdkjs-comparison")
+    }
+
+    bat "cd build_tools &&\
+            call python configure.py ${confParams} &&\
             call python make.py"
 
     bat "cd server && \
