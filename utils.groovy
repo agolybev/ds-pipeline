@@ -66,14 +66,14 @@ def linuxBuild(String branch = 'master', String platform = 'native', Boolean cle
 {
     checkoutRepos(branch)
     sh "cd build_tools && \
-        ./configure \
+        ./configure.py \
             --module \"server\"\
             --platform ${platform}\
             --update false\
             --branch ${branch}\
             --clean ${clean.toString()}\
             --qt-dir \$QT_PATH &&\
-        ./make"
+        ./make.py"
     sh "cd server && \
         make all ext"
     sh "cd document-server-integration && \
