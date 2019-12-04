@@ -25,8 +25,8 @@ return this
 def getReposList()
 {
     def repos = []
+    repos.add('build_tools')
     repos.add('core')
-    repos.add('core-ext')
     repos.add('desktop-sdk')
 
     return repos
@@ -44,11 +44,19 @@ def checkoutRepos(String branch = 'master')
 def linuxBuild(String branch = 'master')
 {
     checkoutRepos(branch)
-    sh "cd core/Common/3dParty && \
-        ./make.sh"
+    String confParams = "\
+        --module \"core\"\
+        --platform ${platform}\
+        --update false\
+        --branch ${branch}\
+        --clean ${clean.toString()}\
+        --qt-dir \$QT_PATH"
+
+    sh "cd build_tools && \
+        ./configure.py ${confParams} &&\
+        ./make.py"
     sh "cd core && \
-        make clean && \
-        make all ext desktop deploy"
+        make deploy"
 
     return this
 }
@@ -57,13 +65,22 @@ def windowsBuild(String branch = 'master', String platform = 'x64', String sdk =
 {
     checkoutRepos(branch)
 
-    bat "cd core\\Common\\3dParty && \
-            call make.bat"
+    String confParams = "\
+        --module \"core\"\
+        --platform ${platform}\
+        --update false\
+        --branch ${branch}\
+        --clean ${clean.toString()}\
+        --qt-dir \"C:\\Qt\\Qt5.9.8\\5.9.8\"\
+        --qt-dir-xp \"C:\\Qt\\Qt5.6.3\\5.6.3\""
+
+    bat "cd build_tools &&\
+            call python configure.py ${confParams} &&\
+            call python make.py"
 
     bat "cd core && \
             call \"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\" ${platform} ${sdk} && \
-            mingw32-make clean && \
-            mingw32-make all ext desktop deploy"
+            mingw32-make deploy"
 
     return this
 }
