@@ -44,12 +44,13 @@ def checkoutRepos(String branch = 'master')
 def linuxBuild(String branch = 'master')
 {
     checkoutRepos(branch)
+    
     String confParams = "\
         --module \"core\"\
-        --platform ${platform}\
+        --platform linux_64\
         --update false\
         --branch ${branch}\
-        --clean ${clean.toString()}\
+        --clean true\
         --qt-dir \$QT_PATH"
 
     sh "cd build_tools && \
@@ -67,10 +68,10 @@ def windowsBuild(String branch = 'master', String platform = 'x64', String sdk =
 
     String confParams = "\
         --module \"core\"\
-        --platform ${platform}\
+        --platform win_64\
         --update false\
         --branch ${branch}\
-        --clean ${clean.toString()}\
+        --clean true\
         --qt-dir \"C:\\Qt\\Qt5.9.8\\5.9.8\"\
         --qt-dir-xp \"C:\\Qt\\Qt5.6.3\\5.6.3\""
 
