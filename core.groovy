@@ -71,7 +71,7 @@ def windowsBuild(String branch = 'master', String platform = 'x64', String sdk =
         --platform win_64\
         --update false\
         --branch ${branch}\
-        --clean true\
+        --clean false\
         --qt-dir \"C:\\Qt\\Qt5.9.8\\5.9.8\"\
         --qt-dir-xp \"C:\\Qt\\Qt5.6.3\\5.6.3\""
 
