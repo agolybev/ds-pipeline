@@ -82,9 +82,6 @@ def linuxBuild(String branch = 'master', String platform = 'native', Boolean cle
     sh "cd build_tools && \
         ./configure.py ${confParams} &&\
         ./make.py"
-    sh "cd server && \
-        make clean && \
-        make all"
     sh "cd document-server-integration && \
         make all"
     sh "cd document-server-package && \
@@ -116,10 +113,6 @@ def windowsBuild(String branch = 'master', String platform = 'native', Boolean c
     bat "cd build_tools &&\
             call python configure.py ${confParams} &&\
             call python make.py"
-
-    bat "cd server && \
-            mingw32-make clean && \
-            mingw32-make all"
 
     bat "cd document-server-integration && \
             mingw32-make all"
