@@ -38,6 +38,7 @@ def getReposList(String branch = 'master')
     repos.add('server')
     repos.add('web-apps')
     repos.add('Docker-DocumentServer')
+    repos.add('DocumentBuilder')
     return repos
 }
 
